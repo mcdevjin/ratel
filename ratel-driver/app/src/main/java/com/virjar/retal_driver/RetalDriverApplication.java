@@ -6,14 +6,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.ArrayMap;
-import android.util.Log;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.XposedHelpers;
+import me.weishu.exposed.ExposedBridge;
 
 /**
  * Created by virjar on 2018/10/5.<br>
@@ -23,25 +22,20 @@ import de.robv.android.xposed.XposedHelpers;
 public class RetalDriverApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
-        // 配置动态加载环境
-        Object currentActivityThread = XposedHelpers.callStaticMethod(
-                XposedHelpers.findClass("android.app.ActivityThread", RetalDriverApplication.class.getClassLoader())
-                , "currentActivityThread");//获取主线程对象 http://blog.csdn.net/myarrow/article/details/14223493
-        String packageName = this.getPackageName();//当前apk的包名
-        ArrayMap mPackages = (ArrayMap) XposedHelpers.getObjectField(currentActivityThread, "mPackages");
-        WeakReference wr = (WeakReference) mPackages.get(packageName);
-
         releaseApkFiles();
 
+        Class<?> contextImplClazz = XposedHelpers.findClassIfExists("android.app.ContextImpl", base.getClassLoader());
+        Object contextImpl = XposedHelpers.callMethod(contextImplClazz, "getImpl", base);
+        Object loadApk = XposedHelpers.getObjectField(contextImpl, "mPackageInfo");
         ClassLoader parentClassLoader = RetalDriverApplication.class.getClassLoader();
         try {
             //  Class<?> aClass = XposedHelpers.findClass("android.app.LoadedApk", RetalDriverApplication.class.getClassLoader());
-            parentClassLoader = (ClassLoader) XposedHelpers.getObjectField(wr.get(), "mClassLoader");
+            parentClassLoader = (ClassLoader) XposedHelpers.getObjectField(loadApk, "mClassLoader");
         } catch (Exception e) {
             //ignore
         }
         PathClassLoader originClassLoader = new PathClassLoader(new File(CommonUtil.ratelWorkDir(this), Constant.originAPKFileName).getAbsolutePath(), parentClassLoader);
-        XposedHelpers.setObjectField(wr.get(), "mClassLoader", originClassLoader);
+        XposedHelpers.setObjectField(loadApk, "mClassLoader", originClassLoader);
         super.attachBaseContext(base);
     }
 
@@ -55,10 +49,7 @@ public class RetalDriverApplication extends Application {
     @SuppressWarnings("unchecked")
     public void onCreate() {
         super.onCreate();
-
-        Log.i("demo", "onCreate");
-        // 如果源应用配置有Appliction对象，则替换为源应用Applicaiton，以便不影响源程序逻辑。
-        String appClassName = null;
+        String appClassName;
         try {
             ApplicationInfo ai = getPackageManager()
                     .getApplicationInfo(getPackageName(),
@@ -67,7 +58,7 @@ public class RetalDriverApplication extends Application {
             if (bundle != null && bundle.containsKey(Constant.APPLICATION_CLASS_NAME)) {
                 appClassName = bundle.getString(Constant.APPLICATION_CLASS_NAME);//className 是配置在xml文件中的。
             } else {
-                Log.i("demo", "have no application class name");
+                loadXposedModule(this);
                 return;
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -85,21 +76,19 @@ public class RetalDriverApplication extends Application {
         Object loadedApkInfo = XposedHelpers.getObjectField(mBoundApplication, "info");
         //把当前进程的mApplication 设置成了null
         XposedHelpers.setObjectField(loadedApkInfo, "mApplication", null);
-
-
         Application oldApplication = (Application) XposedHelpers.getObjectField(currentActivityThread, "mInitialApplication");
-
 
         //http://www.codeceo.com/article/android-context.html
         ArrayList<Application> mAllApplications = (ArrayList<Application>) XposedHelpers.getObjectField(currentActivityThread, "mAllApplications");
         mAllApplications.remove(oldApplication);//删除oldApplication
 
-        ApplicationInfo appinfo_In_LoadedApk = (ApplicationInfo) XposedHelpers.getObjectField(loadedApkInfo, "mApplicationInfo");
+        ApplicationInfo appinfoInLoadedApk = (ApplicationInfo) XposedHelpers.getObjectField(loadedApkInfo, "mApplicationInfo");
 
-        ApplicationInfo appinfo_In_AppBindData = (ApplicationInfo) XposedHelpers.getObjectField(mBoundApplication, "appInfo");
+        ApplicationInfo appinfoInAppBindData = (ApplicationInfo) XposedHelpers.getObjectField(mBoundApplication, "appInfo");
 
-        appinfo_In_LoadedApk.className = appClassName;
-        appinfo_In_AppBindData.className = appClassName;
+        appinfoInLoadedApk.className = appClassName;
+        appinfoInAppBindData.className = appClassName;
+        //makeApplication 的时候，就会调用attachBaseContext方法
         Application app = (Application) XposedHelpers.callMethod(loadedApkInfo, "makeApplication", false, null);
         XposedHelpers.setObjectField(currentActivityThread, "mInitialApplication", app);
 
@@ -109,6 +98,13 @@ public class RetalDriverApplication extends Application {
             XposedHelpers.setObjectField(localProvider, "mContext", app);
         }
         app.onCreate();
+        loadXposedModule(app);
+    }
 
+    private void loadXposedModule(Application application) {
+        ExposedBridge.initOnce(application, application.getApplicationInfo(), application.getClassLoader());
+        File modulePath = new File(CommonUtil.ratelWorkDir(application), Constant.xposedBridgeApkFileName);
+        ExposedBridge.loadModule(modulePath.getAbsolutePath(), null, null,
+                application.getApplicationInfo(), application.getClassLoader());
     }
 }
