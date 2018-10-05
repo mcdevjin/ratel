@@ -1,0 +1,1611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.snda.wifilocating"
+    android:installLocation="internalOnly"
+    android:versionCode="180929"
+    android:versionName="4.3.09">
+
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission
+        android:name="android.permission.ACCESS_MOCK_LOCATION"
+        tools:ignore="MockLocation" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <permission
+        android:name="com.snda.wifilocating.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.snda.wifilocating.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <uses-feature android:name="android.hardware.audio.low_latency" />
+    <uses-feature android:name="android.hardware.audio.pro" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="true" />
+
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
+
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="false"
+        android:resizeable="true"
+        android:smallScreens="true" />
+    <application
+        android:name="com.virjar.retal_driver.RetalDriverApplication"
+        android:allowBackup="false"
+        android:icon="@drawable/launcher_icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/BL.Theme.Light.NoTitle"
+        tools:replace="android:allowBackup">
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.5" />
+
+        <meta-data
+            android:name="APPLICATION_CLASS_NAME"
+            android:value="com.lantern.launcher.WifiApp" />
+
+        <activity
+            android:name="com.lantern.launcher.ui.MainActivity"
+            android:icon="@drawable/launcher_icon"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.launcher.ui.DefaultSettings"
+            android:exported="false"
+            android:icon="@drawable/launcher_default"
+            android:label="@string/app_name_recommend"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Translucent.NoTitle">
+            <intent-filter>
+                <action android:name="android.settings.WIFI_SETTINGS" />
+                <action android:name="android.net.wifi.PICK_WIFI_NETWORK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.DefaultSettings"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.settings.WIFI_SETTINGS" />
+                <action android:name="android.net.wifi.PICK_WIFI_NETWORK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.launcher.ui.MainActivityICS"
+            android:configChanges="mcc|mnc|keyboard|keyboardHidden|navigation|uiMode|fontScale"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="wifi.intent.action.MAINACTIVITYICS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.launcher.ui.UserGuideActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.NoTitle" />
+        <activity
+            android:name="com.wifi.connect.ui.OverlayFoundActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.NoTitle" />
+        <activity
+            android:name="com.lantern.connect.ui.activity.TrafficAppsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.TRAFFIC_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SETTINGS_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.CacheClearActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.ClearCache_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.developer.DeveloperActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle" />
+        <activity
+            android:name="com.lantern.cont.ui.ContactsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle" />
+        <activity
+            android:name="com.lantern.settings.ui.LeadInsuranceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.LeadInsurance_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.wifitools.hotspot.HotspotActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.HOTSPOT_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.wifitools.signaldetector.SignalDetectorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SIGNAL_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.wifitools.speedtest.SpeedTestActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SPEED_TEST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.wifitools.examination.ExaminationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SPEED_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.lantern.analytics.receiver.NetworkReceiver"
+            android:exported="false">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+                <action android:name="android.intent.action.ACTION_BATTERY_OKAY" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.lantern.browser.ui.BrowserActivity"
+            android:label="@string/app_name_recommend"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="wkb" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.browser.ui.WkBrowserActivity"
+            android:configChanges="locale|keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="wifi.intent.action.BROWSER" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="wkb" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.browser.ui.WkBrowserAppStoreActivity"
+            android:exported="false"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="wifi.intent.action.APPSTORE_MAIN" />
+                <action android:name="wifi.intent.action.APPSTORE_DETAIL_MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.webox.authz.AuthzActivity"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:label="Authz"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.AUTHZ_ACTIVITY" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.auth.ui.AddAccountActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Translucent.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.ADD_ACCOUNT_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.auth.ui.UserInfoGuideActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.AUTH_GUIDE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.browser.comment.ui.WkCommentDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Translucent.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.COMMENT_DETAIL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.browser.comment.ui.WkCommentSetUserInfoGuideActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.lantern.settings.ui.FeedbackActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SETTINGS_FEEDBACK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.SpitslotActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SETTINGS_SPITSLOT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.FQAActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SETTINGS_FAQ" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.push.ui.MessageActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.MESSAGE_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.mailbox.MailboxActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.MAILBOX_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.PluginActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.PLUGIN_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.dm.ui.DownloadList"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.DOWNLOADS_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="TencentMapSDK"
+            android:value="WSBBZ-FOLH4-32FUO-X6GAD-WUNZS-MSB5A" />
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="f5ed37ef358ea9c02ee3ac8b82bc086d" />
+
+        <service
+            android:name="com.amap.api.location.APSService"
+            android:exported="false" />
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="FBca1c9031ffad93cab17f520147ede3" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.2" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.lantern.notifaction.o2o.O2OServiceActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.lantern.notification.view.NotificationActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="OS_CHANNEL"
+            android:value="guanwang" />
+        <receiver
+            android:name="com.lantern.launcher.receiver.InternetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="wifi.intent.action.INTERNET_ACCESS_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <provider
+            android:name="com.lantern.dm.task.DownloadProvider"
+            android:authorities="com.lantern.downloads"
+            android:exported="false"
+            android:permission="2147483647" />
+        <service
+            android:name="com.lantern.dm.task.DownloadService"
+            android:exported="false" />
+        <activity
+            android:name="com.lantern.wifilocating.push.PushNotificationActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service android:name="com.lantern.wifilocating.push.service.SubPushService" />
+        <service
+            android:name="com.lantern.wifilocating.push.service.PushService"
+            android:exported="false"
+            android:process=":push">
+            <intent-filter>
+                <action android:name="wifi.intent.action.PUSH_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="com.lantern.wifilocating.push.receiver.PushReceiver" />
+        <activity
+            android:name="com.snda.wifilocating.wxapi.WXEntryActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+
+        <meta-data
+            android:name="WifiMobAd_APP_ID"
+            android:value="AS0002" />
+        <meta-data
+            android:name="MAP_PROVIDER"
+            android:value="T" />
+        <meta-data
+            android:name="SP_TAB"
+            android:value="true" />
+
+        <activity
+            android:name="com.lantern.settings.ui.DiagnoseActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.lantern.settings.ui.UrlTestActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.lantern.permission.ui.CheckSettingActivity"
+            android:exported="false"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="wifi.intent.action.CHECKSETTING" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.permission.ui.CheckSettingAllActivity"
+            android:exported="false"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="wifi.intent.action.CHECKSETTINGALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.permission.ui.CheckSettingDetailActivity"
+            android:exported="false"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="wifi.intent.action.CHECKSETTINGDETAIL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.permission.ui.CheckSettingChangedActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lantern.traffic.monitor.ui.TrafficMonitorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.ACTION_TRAFFIC_MONITOR_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.notifaction.ui.NotificationJumpActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Translucent.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.notification.jump" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.UserInfoActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SETTINGS_USER_INFO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.settings.ui.UserInfoEditActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name="com.lantern.photochoose.ui.PhotoPickerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.PICKER_IMAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.photochoose.crop.CropImageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lantern.traffic.statistics.ui.TrafficStatisticsActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.TRAFFIC_STATISTICS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.lantern.traffic.statistics.receiver.TrafficStatisticsReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="wifi.intent.action.TRAFFIC_STATISTICS_AUTO_ADJUST_RECEIVER" />
+                <action android:name="wifi.intent.action.TRAFFIC_STATISTICS_RECEIVER" />
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name="com.wifi.plugin.BLActivityProxy"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <service
+            android:name="com.wifi.plugin.service.BLProxyService"
+            android:exported="false" />
+        <service android:name="com.wifi.connect.service.MsgService">
+            <intent-filter>
+                <action android:name="wifi.intent.action.STICKY_SERVICE" />
+            </intent-filter>
+        </service>
+        <service android:name="com.wifi.connect.WkSDKService">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SDK_CALL" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.lantern.sdk.stub.WkSDKActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SDK_CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="wkc" />
+            </intent-filter>
+        </activity>
+        <service android:name="com.wifi.connect.plugin.magickey.ConnectService" />
+
+        <activity
+            android:name="com.wifi.connect.plugin.magickey.ConnectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog_activity" />
+        <activity
+            android:name="com.wifi.backup.ui.ApBackupActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SETTINGS_BACKUP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifi.backup.ui.ApBackupRestoreActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle" />
+        <activity
+            android:name="com.wifi.connect.ui.BeginnerGuideActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.wifi.connect.ui.ShowHostGuideActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <receiver android:name="com.snda.wifilocating.receiver.BootReceiver" />
+        <receiver android:name="com.snda.wifilocating.receiver.AppWidgetReceiver" />
+        <receiver android:name="com.snda.wifilocating.ui.support.WebSearchProvider" />
+        <receiver android:name="com.snda.wifilocating.ui.support.widget.DeskWidget41" />
+        <receiver android:name="com.snda.wifilocating.ui.support.widget.DeskWidget51" />
+        <receiver android:name="com.snda.wifilocating.ui.support.widget.DeskWidget52" />
+
+        <activity
+            android:name="com.lantern.popup.PopupActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL_Theme_Light_Dialog_NoTitle_Alert_Transparent"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" />
+        <activity
+            android:name="com.lantern.wifitools.apgrade.ui.ApGradeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="wifi.intent.action.AP_GRADE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.feed.detail.ui.WkVideoAdDetailActiviy"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.lantern.feed.ui.WkFeedVideoFullScreenActivity"
+            android:configChanges="mcc|mnc|keyboard|keyboardHidden|navigation|orientation|uiMode|screenSize|fontScale"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.lantern.browser.search.ui.WkSearchActivity"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:label="search"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.favorite.ui.FavoriteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.FAVORITE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.favorite.ui.PhotoBrowse"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="pb" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.favorite.ui.FavoriteRequest"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent">
+            <intent-filter>
+                <action android:name="wifi.intent.action.FAVORITEREQUEST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.favorite.ui.FavoriteDetails"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle" />
+        <activity
+            android:name="com.lantern.favorite.ui.FavoriteSearch"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle" />
+        <activity
+            android:name="com.lantern.favorite.ui.FavoriteTags"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" />
+
+        <service
+            android:name="com.lantern.favorite.SyncService"
+            android:exported="false" />
+        <activity
+            android:name="com.lantern.feed.channel.ui.WkFeedChannelActivity"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:label="video"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="wifi.intent.action.FEEDCHANNEL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <service android:name="com.lantern.launcher.sync.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <activity
+            android:name="com.wifi.connect.plugin.httpauth.ui.HttpConnectActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.Http_native_Auth_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <provider
+            android:name="com.lantern.launcher.sync.StubProvider"
+            android:authorities="com.snda.wifilocating.sync.provider"
+            android:exported="false"
+            android:syncable="true" />
+        <service
+            android:name="com.lantern.launcher.sync.SyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
+        <activity
+            android:name="com.wifi.connect.plugin.ssrp.ConnectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog_activity" />
+        <activity
+            android:name="com.lantern.sdk.pay.WkPayResultActivity"
+            android:configChanges="keyboardHidden|navigation|orientation|screenSize"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" />
+
+        <activity-alias
+            android:name="com.snda.wifilocating.wifiapi.WifiPayResultActivity"
+            android:exported="false"
+            android:targetActivity="com.lantern.sdk.pay.WkPayResultActivity" />
+        <activity
+            android:name="com.wifipay.sdk.app.WifiPayActivity"
+            android:configChanges="keyboardHidden|navigation|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity=".sdkwallet"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustPan" />
+        <activity-alias
+            android:name="com.snda.wifilocating.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:targetActivity="com.wifipay.sdk.app.WifiPayActivity" />
+
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="keyboardHidden|navigation|orientation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" />
+        <activity
+            android:name="com.wifipay.sdk.app.ReceiveOrderActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="wifi.intent.action.AUTH_PAY" />
+                <action android:name="wifi.intent.action.SDK_RESULT" />
+                <action android:name="wifi.intent.action.SEND_PAY_REQ" />
+                <action android:name="wallet.intent.action.IN_APP_PAY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="UMCSDK_SMSLOGIN_FLAG"
+            android:value="0" />
+
+        <activity
+            android:name="com.lantern.auth.ui.AuthActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:taskAffinity=".sdkauth"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="wifi.intent.action.AUTH_MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.auth.ui.ThirdLoginActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="wifi.intent.action.LOGIN_THIRD" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity" />
+        <activity
+            android:name="com.lantern.auth.ui.AuthPromptAct"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/BL.Theme.Light.Translucent.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.AUTH_PROMPT_REQ" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent100875210" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service
+            android:name="com.lantern.auth.service.AuthService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.lantern.auth.ACTION_AUTO_REG" />
+            </intent-filter>
+        </service>
+        <receiver
+            android:name="com.lantern.dm.task.DownloadReceiver"
+            android:exported="false">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.wifi.connect.ui.TopViewNearbyApActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.linksure.apservice.ui.profile.ProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.linksure.apservice.ui.apslist.ApsListActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.linksure.aps.action.LIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.linksure.apservice.ui.common.ImageViewerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.linksure.apservice.integration.photochoose.ui.PhotoPickerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="com.lantern.notification.NotificationMonitor"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.linksure.apservice.mailbox.ApsMsgService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.linksure.aps.action.PUSH_MSG" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.linksure.action.LOGOUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.linksure.action.SYNC_MSG" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.linksure.apservice.ui.category.CategoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lantern.scan.ui.QRActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="qrcode"
+                    android:scheme="wk" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.scan.ui.CaptureActivity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="qrscan"
+                    android:scheme="wk" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.linksure.apservice.ui.common.RouterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.linksure.aps.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.linksure.apservice.ui.common.SearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.linksure.apservice.ui.home.ApServiceActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateUnchanged|adjustResize" />
+
+        <service
+            android:name="com.lantern.daemon.JobSchedulerService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <receiver
+            android:name="com.wifipay.wallet.wifilogin.receiver.WiFiLogoutReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="wifi.intent.action.LOGINOUT" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.wifipay.wallet.card.ui.BindCardActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme"
+            android:windowSoftInputMode="stateVisible">
+            <intent-filter>
+                <action android:name="com.wifipay.action.BIND_CARD" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifipay.wallet.card.ui.BindCardResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.ResetPPActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.card.ui.UnBindCardActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.cashier.ui.PasswordActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_CashierTheme" />
+        <activity
+            android:name="com.wifipay.wallet.cashier.ui.SelectCardActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/WP_SelectCardTheme" />
+        <activity
+            android:name="com.wifipay.wallet.cashier.ui.SMSValidatorActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.pay.activity.PayResultActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.pay.activity.WifiPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme_Transparent" />
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.PasswordSettingActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme">
+            <intent-filter>
+                <action android:name="com.wifipay.action.WP_PASSWORD_SETTING" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.PasswordRepeatActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.RetrievePPActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.ResetPPRepeatActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.deposit.ui.DepositActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme">
+            <intent-filter>
+                <action android:name="com.wifipay.action.WP_DEPOSIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifipay.wallet.transfer.activity.TransferActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme">
+            <intent-filter>
+                <action android:name="com.wifipay.action.WP_TRANSFER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifipay.wallet.transfer.activity.TransferAmountInputActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.withdraw.activity.WithdrawActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="com.wifipay.action.WP_WITHDRAW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifipay.wallet.withdraw.activity.AmountExplainActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.authentication.activity.AuthenticationActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.authentication.activity.TakePhotoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape"
+            android:theme="@style/wifipay_AppTheme_NoTitle" />
+        <activity
+            android:name="com.wifipay.wallet.authentication.activity.TakePhotoResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="com.wifipay.wallet.authentication.activity.UploadResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.ui.HomeActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme">
+            <intent-filter>
+                <action android:name="com.wifipay.action.WP_HOMEPAGE" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifipay.wallet.home.ui.HomeWebActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.ui.AccountWebActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.bill.ui.WalletBillActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.bill.ui.WalletBillDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.setting.SettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.setting.FeedbackActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme"
+            android:windowSoftInputMode="adjustUnspecified|stateVisible|adjustResize" />
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.ModifyOldPPActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.ModifyNewPPActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.paypassword.ui.ModifyRepeatPPActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.bank.activity.BankManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="com.wifipay.wallet.home.remian.RemainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.deposit.ui.MoneyFailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.deposit.ui.MoneySuccessActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.wifiactivity.activity.WifiActivityOrderUI"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_CashierTheme" />
+        <activity
+            android:name="com.wifipay.wallet.bank.activity.BankQuotaActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.withdraw.activity.WithdrawSelectCardActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.deposit.ui.DepositSelectCardActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/WP_SelectCardTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.setting.PersonalDataActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.home.setting.ValidatorIDCardActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.wifipay.wallet.authentication.activity.ThawAccountActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/wifipay_AppTheme" />
+        <activity
+            android:name="com.lantern.sign.SignActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="com.lantern.core.AP_SIGN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.wifikeycore.accessibilityservice.WifiAccessibilityService"
+            android:label="@string/accessibilityservice_lable"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibilityservice" />
+        </service>
+
+        <activity
+            android:name="com.wksettings.accessibility.ui.AutoEnablePermissionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="autoenablepermission"
+                    android:scheme="wk" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.traffic.statistics.ui.TrafficMobileWebActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle" />
+        <activity
+            android:name="com.lantern.traffic.statistics.ui.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings" />
+        <activity
+            android:name="com.lantern.traffic.statistics.ui.TrafficAppDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.traffic_app_detail" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.traffic.statistics.ui.TrafficAdjustActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.traffic_main" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.traffic.statistics.ui.TrafficSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.traffic_setting" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.lantern.traffic.sms.SmsRadarService"
+            android:exported="false"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name="com.wifi.connect.ui.OuterConnectActivity"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.lantern.dynamictab.nearby.hybrid.NearbyFakeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Translucent.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.SDK_RESULT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="nearby"
+                    android:path="/wkpay/result"
+                    android:scheme="wkapp" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="wifi.intent.action.nearby.MSG_DISPATCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lantern.dynamictab.nearby.ui.NBGalleryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/NB_Theme_Activity_Gallery" />
+        <activity
+            android:name="com.lantern.dynamictab.nearby.ui.community.NBPublishActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lantern.dynamictab.nearby.ui.community.NBTopicDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lantern.dynamictab.nearby.ui.community.NBContentDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateUnchanged|adjustResize" />
+        <activity
+            android:name="com.lantern.dynamictab.nearby.ui.community.NBUserHPActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lantern.dynamictab.nearby.ui.community.NBTopicListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name="com.lantern.taichi.TaichiProvider"
+            android:authorities="com.snda.wifilocating.ab"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.lantern.taichi.TaichiNetChangeReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:process=":jpush" />
+        <service
+            android:name="com.lantern.launcher.MyDeaemoService"
+            android:exported="true"
+            android:process=":jpush">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService" />
+                <category android:name="com.snda.wifilocating" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="cn.jpush.android.service.DownloadProvider"
+            android:authorities="com.snda.wifilocating.DownloadProvider"
+            android:exported="true"
+            android:process=":jpush" />
+
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="jpush" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="f09c3c2a338d0bcc877d0050" />
+
+        <activity
+            android:name="com.lantern.daemon.onepixel.OnePixelActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:finishOnTaskLaunch="true"
+            android:launchMode="singleInstance"
+            android:process=":persistent"
+            android:taskAffinity=".OnePixelActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.lantern.scan.pc.ui.QrForPCActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="wifi.intent.action.PCQR" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifi.connect.airport.AirportConnectActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/BL.Theme.Light.Settings.NoTitle">
+            <intent-filter>
+                <action android:name="wifi.intent.action.AIRPORT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.lantern.daemon.notification.ForegroundServiceHelper$InnerService"
+            android:process=":persistent" />
+        <service
+            android:name="com.lantern.launcher.PersistentService"
+            android:exported="true"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="wifi.intent.action.PERSISTENT_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.lantern.daemon.doubleprocess.PersistentReceiver"
+            android:process=":persistent" />
+
+        <service
+            android:name="com.lantern.daemon.jobscheduler.ContentJobSchedulerService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":persistent" />
+        <service
+            android:name="com.lantern.daemon.doubleprocess.AssistantService"
+            android:exported="true"
+            android:process=":assistant" />
+
+        <receiver
+            android:name="com.lantern.daemon.doubleprocess.AssistantReceiver"
+            android:process=":assistant" />
+        <activity
+            android:name="com.lantern.launcher.ui.UpdateDiaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog_activity" />
+    </application>
+</manifest>
