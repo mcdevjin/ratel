@@ -62,3 +62,4 @@ fastlane/readme.md
 ratel-tool/src/main/resources/ratel-driver.apk
 ratel_work_dir/
 test/
+*.apk
