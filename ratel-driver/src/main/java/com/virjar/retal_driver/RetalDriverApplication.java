@@ -4,10 +4,17 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.ArrayMap;
+import android.util.Log;
+
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import dalvik.system.PathClassLoader;
@@ -20,12 +27,26 @@ import me.weishu.exposed.ExposedBridge;
  */
 
 public class RetalDriverApplication extends Application {
+    public static final String originAPKFileName = "ratel_origin_apk.apk";
+    public static final String xposedBridgeApkFileName = "ratel_xposed_module.apk";
+    public static final String retalWorkDirName = "ratel";
+
+    /**
+     * 如果原始的apk文件，配置了Application，那么我们需要加载原始的apk
+     */
+    static final String APPLICATION_CLASS_NAME = "APPLICATION_CLASS_NAME";
+
     @Override
     protected void attachBaseContext(Context base) {
+        //第一步需要call supper，否则Application并不完整，还无法作为context使用，当然此时base context是可用状态
+        super.attachBaseContext(base);
+        //exposed框架，在driver下面定义，所以需要在替换classloader之前，完成exposed框架的so库加载
+        ExposedBridge.initOnce(this, getApplicationInfo(), getClassLoader());
+        //释放两个apk，一个是xposed模块，一个是原生的apk，原生apk替换为当前的Application作为真正的宿主，xposed模块apk在Application被替换之前作为补丁代码注入到当前进程
         releaseApkFiles();
 
         Class<?> contextImplClazz = XposedHelpers.findClassIfExists("android.app.ContextImpl", base.getClassLoader());
-        Object contextImpl = XposedHelpers.callMethod(contextImplClazz, "getImpl", base);
+        Object contextImpl = XposedHelpers.callStaticMethod(contextImplClazz, "getImpl", base);
         Object loadApk = XposedHelpers.getObjectField(contextImpl, "mPackageInfo");
         ClassLoader parentClassLoader = RetalDriverApplication.class.getClassLoader();
         try {
@@ -34,14 +55,14 @@ public class RetalDriverApplication extends Application {
         } catch (Exception e) {
             //ignore
         }
-        PathClassLoader originClassLoader = new PathClassLoader(new File(CommonUtil.ratelWorkDir(this), Constant.originAPKFileName).getAbsolutePath(), parentClassLoader);
+        PathClassLoader originClassLoader = new PathClassLoader(new File(ratelWorkDir(this), originAPKFileName).getAbsolutePath(), parentClassLoader);
         XposedHelpers.setObjectField(loadApk, "mClassLoader", originClassLoader);
-        super.attachBaseContext(base);
+
     }
 
     private void releaseApkFiles() {
-        CommonUtil.releaseAssetResource(this, Constant.originAPKFileName);
-        CommonUtil.releaseAssetResource(this, Constant.xposedBridgeApkFileName);
+        releaseAssetResource(this, originAPKFileName);
+        releaseAssetResource(this, xposedBridgeApkFileName);
     }
 
     private String getOriginApplicationName() {
@@ -50,8 +71,8 @@ public class RetalDriverApplication extends Application {
                     .getApplicationInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
-            if (bundle != null && bundle.containsKey(Constant.APPLICATION_CLASS_NAME)) {
-                return bundle.getString(Constant.APPLICATION_CLASS_NAME);//className 是配置在xml文件中的。
+            if (bundle != null && bundle.containsKey(APPLICATION_CLASS_NAME)) {
+                return bundle.getString(APPLICATION_CLASS_NAME);//className 是配置在xml文件中的。
             }
             return null;
         } catch (PackageManager.NameNotFoundException e) {
@@ -110,9 +131,36 @@ public class RetalDriverApplication extends Application {
     }
 
     private void loadXposedModule(Application application) {
-        ExposedBridge.initOnce(application, application.getApplicationInfo(), application.getClassLoader());
-        File modulePath = new File(CommonUtil.ratelWorkDir(application), Constant.xposedBridgeApkFileName);
+        File modulePath = new File(ratelWorkDir(application), xposedBridgeApkFileName);
         ExposedBridge.loadModule(modulePath.getAbsolutePath(), null, null,
                 application.getApplicationInfo(), application.getClassLoader());
+    }
+
+    public static File ratelWorkDir(Context context) {
+        return new File(context.getFilesDir(), retalWorkDirName);
+    }
+
+    public static void releaseAssetResource(Context context, String name) {
+        File destinationFileName = new File(ratelWorkDir(context), name);
+        if (destinationFileName.exists()) {
+            return;
+        }
+        File parentDir = destinationFileName.getParentFile();
+        if (!parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+        synchronized (RetalDriverApplication.class) {
+            if (destinationFileName.exists()) {
+                return;
+            }
+            AssetManager assets = context.getAssets();
+            try (InputStream inputStream = assets.open(name)) {
+                IOUtils.copy(inputStream, new FileOutputStream(destinationFileName));
+            } catch (IOException e) {
+                Log.e("weijia", "release xposed bridge apk file failed", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
     }
 }

@@ -137,6 +137,9 @@ public class Main {
         IOUtils.closeQuietly(inputStream);
         IOUtils.closeQuietly(zipFile);
 
+        System.out.println("植入容器so文件...");
+        //TODO
+
         System.out.println("修正AndroidManifest.xml...");
 
         File manifestFile = new File(originBuildDir, manifestFileName);
