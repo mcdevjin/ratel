@@ -44,27 +44,33 @@ public class RetalDriverApplication extends Application {
         CommonUtil.releaseAssetResource(this, Constant.xposedBridgeApkFileName);
     }
 
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void onCreate() {
-        super.onCreate();
-        String appClassName;
+    private String getOriginApplicationName() {
         try {
             ApplicationInfo ai = getPackageManager()
                     .getApplicationInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             if (bundle != null && bundle.containsKey(Constant.APPLICATION_CLASS_NAME)) {
-                appClassName = bundle.getString(Constant.APPLICATION_CLASS_NAME);//className 是配置在xml文件中的。
-            } else {
-                loadXposedModule(this);
-                return;
+                return bundle.getString(Constant.APPLICATION_CLASS_NAME);//className 是配置在xml文件中的。
             }
+            return null;
         } catch (PackageManager.NameNotFoundException e) {
             //this exception will not happened
             throw new IllegalStateException(e);
         }
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onCreate() {
+        super.onCreate();
+        String appClassName = getOriginApplicationName();
+        if (appClassName == null) {
+            loadXposedModule(this);
+            return;
+        }
+
         Class<?> activityThreadClass = XposedHelpers.findClass("android.app.ActivityThread", RetalDriverApplication.class.getClassLoader());
         //有值的话调用该Applicaiton
         Object currentActivityThread = XposedHelpers.callStaticMethod(activityThreadClass,
@@ -88,6 +94,8 @@ public class RetalDriverApplication extends Application {
 
         appinfoInLoadedApk.className = appClassName;
         appinfoInAppBindData.className = appClassName;
+
+        loadXposedModule(this);
         //makeApplication 的时候，就会调用attachBaseContext方法
         Application app = (Application) XposedHelpers.callMethod(loadedApkInfo, "makeApplication", false, null);
         XposedHelpers.setObjectField(currentActivityThread, "mInitialApplication", app);
@@ -98,7 +106,7 @@ public class RetalDriverApplication extends Application {
             XposedHelpers.setObjectField(localProvider, "mContext", app);
         }
         app.onCreate();
-        loadXposedModule(app);
+
     }
 
     private void loadXposedModule(Application application) {
