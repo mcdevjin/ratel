@@ -15,4 +15,5 @@ dependencies {
     implementation 'org.smali:baksmali:2.2.5'
     implementation 'org.smali:smali:2.2.5'
     implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.yaml:snakeyaml:1.18:android'
 }

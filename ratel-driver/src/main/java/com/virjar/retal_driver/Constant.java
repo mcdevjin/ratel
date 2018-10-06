@@ -12,5 +12,5 @@ public class Constant {
     /**
      * 如果原始的apk文件，配置了Application，那么我们需要加载原始的apk
      */
-    public static final String APPLICATION_CLASS_NAME = "APPLICATION_CLASS_NAME";
+    static final String APPLICATION_CLASS_NAME = "APPLICATION_CLASS_NAME";
 }

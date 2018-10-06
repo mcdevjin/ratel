@@ -257,7 +257,7 @@ public final class ResXmlPatcher {
      * @throws SAXException
      * @throws ParserConfigurationException
      */
-    private static Document loadDocument(File file)
+    public static Document loadDocument(File file)
             throws IOException, SAXException, ParserConfigurationException {
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -291,7 +291,7 @@ public final class ResXmlPatcher {
      * @throws ParserConfigurationException
      * @throws TransformerException
      */
-    private static void saveDocument(File file, Document doc)
+    public static void saveDocument(File file, Document doc)
             throws IOException, SAXException, ParserConfigurationException, TransformerException {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
