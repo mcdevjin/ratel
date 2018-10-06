@@ -1,0 +1,18 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+dependencies {
+    implementation 'xmlunit:xmlunit:1.6'
+    implementation 'xpp3:xpp3:1.1.4c'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'commons-cli:commons-cli:1.4'
+    implementation 'org.smali:baksmali:2.2.5'
+    implementation 'org.smali:smali:2.2.5'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+}

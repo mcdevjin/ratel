@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.virjar.demoapp.MainActivity">
+    tools:context="com.virjar.ratel.demoapp.MainActivity">
 
     <TextView
+        android:id="@+id/indexTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"

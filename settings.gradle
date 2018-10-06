@@ -1,1 +1,1 @@
-include ':ratel-driver',':ratel-tool'
+include ':ratel-driver',':ratel-tool', ':demoapp', ':crackmodule', ':apktool'

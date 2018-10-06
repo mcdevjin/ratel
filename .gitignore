@@ -58,4 +58,5 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
+#驱动文件，使用driver项目构建出来，然后放置到ratel-tool的resource目录，不要直接把他放到代码文件中
 ratel-tool/src/main/resources/ratel-driver.apk
