@@ -10,18 +10,30 @@ import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
 
+import com.taobao.android.dexposed.utility.Runtime;
+
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import dalvik.system.PathClassLoader;
+import de.robv.android.xposed.ExposedHelper;
+import de.robv.android.xposed.IXposedHookInitPackageResources;
+import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import me.weishu.exposed.ExposedBridge;
+
+import static com.taobao.android.dexposed.DexposedBridge.log;
 
 /**
  * Created by virjar on 2018/10/5.<br>
@@ -44,6 +56,10 @@ public class RetalDriverApplication extends Application {
         super.attachBaseContext(base);
         //exposed框架，在driver下面定义，所以需要在替换classloader之前，完成exposed框架的so库加载
         ExposedBridge.initOnce(this, getApplicationInfo(), getClassLoader());
+
+        if (!checkSupport()) {
+            throw new IllegalStateException("epic 不支持的版本");
+        }
         //释放两个apk，一个是xposed模块，一个是原生的apk，原生apk替换为当前的Application作为真正的宿主，xposed模块apk在Application被替换之前作为补丁代码注入到当前进程
         releaseApkFiles();
 
@@ -108,12 +124,8 @@ public class RetalDriverApplication extends Application {
             return;
         }
 
-        Class<?> activityThreadClass = XposedHelpers.findClass("android.app.ActivityThread", RetalDriverApplication.class.getClassLoader());
         //有值的话调用该Applicaiton
-        Object currentActivityThread = XposedHelpers.callStaticMethod(activityThreadClass,
-                "currentActivityThread");
-
-
+        Object currentActivityThread = currentActivityThread();
         Object mBoundApplication = XposedHelpers.getObjectField("currentActivityThread", "mBoundApplication");
 
         Object loadedApkInfo = XposedHelpers.getObjectField(mBoundApplication, "info");
@@ -148,8 +160,9 @@ public class RetalDriverApplication extends Application {
 
     private void loadXposedModule(Application application) {
         File modulePath = new File(ratelWorkDir(application), xposedBridgeApkFileName);
-        ExposedBridge.loadModule(modulePath.getAbsolutePath(), null, null,
+        boolean ret = loadModule(modulePath.getAbsolutePath(),
                 application.getApplicationInfo(), application.getClassLoader());
+        log("模块加载：" + ret);
     }
 
     public static File ratelWorkDir(Context context) {
@@ -220,5 +233,102 @@ public class RetalDriverApplication extends Application {
     @Override
     public Resources.Theme getTheme() {
         return mTheme == null ? super.getTheme() : mTheme;
+    }
+
+
+    private static boolean checkSupport() {
+        if (!Runtime.isArt()) {
+            return true;
+        }
+        try {
+            Class.forName("me.weishu.epic.art.Epic");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean loadModule(final String moduleApkPath,
+                                     final ApplicationInfo currentApplicationInfo, ClassLoader appClassLoader) {
+
+
+        //dexposed这里，会读取xposedinstaller，但是我们并没有xposed installer，所以忽略掉xposed installers的过滤
+        log("Loading modules from " + moduleApkPath);
+
+        if (!new File(moduleApkPath).exists()) {
+            log(moduleApkPath + " does not exist");
+            return false;
+        }
+
+        ClassLoader hostClassLoader = ExposedBridge.class.getClassLoader();
+        ClassLoader appClassLoaderWithXposed = ExposedBridge.getAppClassLoaderWithXposed(appClassLoader);
+
+        //ClassLoader mcl = new DexClassLoader(moduleApkPath, moduleOdexDir, moduleLibPath, hostClassLoader);
+        ClassLoader mcl = new PathClassLoader(moduleApkPath, hostClassLoader);
+        InputStream is = mcl.getResourceAsStream("assets/xposed_init");
+        if (is == null) {
+            log("assets/xposed_init not found in the APK");
+            return false;
+        }
+
+        BufferedReader moduleClassesReader = new BufferedReader(new InputStreamReader(is));
+        try {
+            String moduleClassName;
+            while ((moduleClassName = moduleClassesReader.readLine()) != null) {
+                moduleClassName = moduleClassName.trim();
+                if (moduleClassName.isEmpty() || moduleClassName.startsWith("#"))
+                    continue;
+
+                try {
+                    log("  Loading class " + moduleClassName);
+                    Class<?> moduleClass = mcl.loadClass(moduleClassName);
+
+                    if (!ExposedHelper.isIXposedMod(moduleClass)) {
+                        log("    This class doesn't implement any sub-interface of IXposedMod, skipping it");
+                        continue;
+                    } else if (IXposedHookInitPackageResources.class.isAssignableFrom(moduleClass)) {
+                        log("    This class requires resource-related hooks (which are disabled), skipping it.");
+                        continue;
+                    }
+
+                    final Object moduleInstance = moduleClass.newInstance();
+                    if (moduleInstance instanceof IXposedHookZygoteInit) {
+                        ExposedHelper.callInitZygote(moduleApkPath, moduleInstance);
+                    }
+
+                    if (moduleInstance instanceof IXposedHookLoadPackage) {
+                        // hookLoadPackage(new IXposedHookLoadPackage.Wrapper((IXposedHookLoadPackage) moduleInstance));
+                        IXposedHookLoadPackage.Wrapper wrapper = new IXposedHookLoadPackage.Wrapper((IXposedHookLoadPackage) moduleInstance);
+                        XposedBridge.CopyOnWriteSortedSet<XC_LoadPackage> xc_loadPackageCopyOnWriteSortedSet = new XposedBridge.CopyOnWriteSortedSet<>();
+                        xc_loadPackageCopyOnWriteSortedSet.add(wrapper);
+                        XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(xc_loadPackageCopyOnWriteSortedSet);
+                        lpparam.packageName = currentApplicationInfo.packageName;
+                        lpparam.processName = currentApplicationInfo.processName;
+                        lpparam.classLoader = appClassLoaderWithXposed;
+                        lpparam.appInfo = currentApplicationInfo;
+                        lpparam.isFirstApplication = true;
+                        XC_LoadPackage.callAll(lpparam);
+                    }
+
+                    if (moduleInstance instanceof IXposedHookInitPackageResources) {
+                        // hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper((IXposedHookInitPackageResources) moduleInstance));
+                        // TODO: 17/12/1 Support Resource hook
+                        log("not support hook resource,the hook" + moduleInstance.getClass() + " will be ignore");
+                    }
+
+                    return true;
+                } catch (Throwable t) {
+                    log(t);
+                }
+            }
+        } catch (IOException e) {
+            log(e);
+        } finally {
+            try {
+                is.close();
+            } catch (IOException ignored) {
+            }
+        }
+        return false;
     }
 }
