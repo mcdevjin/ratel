@@ -102,9 +102,17 @@ release ratel container apk ,into :/Users/virjar/git/ratel/ratel_work_dir/ratel-
 输出apk路径：/Users/virjar/git/ratel/com.virjar.ratel.demoapp_1.0_1_ratel_unsigned.apk
 ```
 
+### 演示
+所有演示相关的二进制文件，都在demo_apks目录下
+
 ## 特别说明：
 1. 不是所有系统都支持，但是应该支持目前市面上绝大多数手机
 2. ratel-tool.jar 的参数，必须是两个apk文件，且其中一个为正常的apk，另一个为xposed模块apk，ratel-tool.jar的工作则是将他们糅成一个apk
 3. 工具是给开发者使用的，最好不要随便拿apk和xposed模块来测试，c端模块会有很多限制功能无法使用，大部分情况应该是插入定制的xposed模块
 4. 遇到问题，可以读一读epic文档 https://github.com/tiann/epic/blob/master/README_cn.md
+
+
+#### 捐赠
+如果你觉得作者辛苦了，可以的话请我喝杯咖啡
+![alipay](img/reward.jpg)
 
