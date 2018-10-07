@@ -14,13 +14,16 @@ import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.zip.ZipFile;
+import java.util.Set;
 
 import brut.androlib.Androlib;
+import brut.androlib.AndrolibException;
 import brut.androlib.ApkDecoder;
 import brut.androlib.ApkOptions;
+import brut.androlib.res.util.ExtFile;
 import brut.androlib.res.xml.ResXmlPatcher;
+import brut.directory.Directory;
+import brut.directory.DirectoryException;
 
 /**
  * Created by virjar on 2018/10/6.
@@ -102,6 +105,7 @@ public class Main {
         decoder.setForceDecodeManifest(ApkDecoder.FORCE_DECODE_MANIFEST_FULL);
         decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_NONE);
         decoder.decode();
+        decoder.close();
 
         System.out.println("移出原apk中无用文件");
         File[] files = originBuildDir.listFiles();
@@ -131,14 +135,21 @@ public class Main {
 
 
         System.out.println("植入容器代码...");
-        ZipFile zipFile = new ZipFile(driverAPKFile);
-        InputStream inputStream = zipFile.getInputStream(zipFile.getEntry(DEX_FILE));
-        IOUtils.copy(inputStream, new FileOutputStream(new File(originBuildDir, DEX_FILE)));
-        IOUtils.closeQuietly(inputStream);
-        IOUtils.closeQuietly(zipFile);
-
-        System.out.println("植入容器so文件...");
-        //TODO
+        ExtFile driverAPKImage = new ExtFile(driverAPKFile);
+        Directory unk = driverAPKImage.getDirectory();
+        try {
+            // loop all items in container recursively, ignoring any that are pre-defined by aapt
+            Set<String> driverFiles = unk.getFiles(true);
+            for (String file : driverFiles) {
+                //代码，lib库，使用driver的，因为driver会使用epic的so文件
+                if (file.endsWith(".dex") || file.startsWith("lib") || file.startsWith("libs")) {
+                    unk.copyToDir(originBuildDir, file);
+                }
+            }
+        } catch (DirectoryException ex) {
+            throw new AndrolibException(ex);
+        }
+        driverAPKImage.close();
 
         System.out.println("修正AndroidManifest.xml...");
 
@@ -182,7 +193,6 @@ public class Main {
     private static final String APPLICATION_CLASS_NAME = "APPLICATION_CLASS_NAME";
     private static final String driverApplicationClass = "com.virjar.retal_driver.RetalDriverApplication";
     private static final String manifestFileName = "AndroidManifest.xml";
-    private static final String DEX_FILE = "classes.dex";
     private static final String originAPKFileName = "ratel_origin_apk.apk";
     private static final String xposedBridgeApkFileName = "ratel_xposed_module.apk";
 

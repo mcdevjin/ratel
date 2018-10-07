@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import dalvik.system.PathClassLoader;
@@ -45,6 +47,7 @@ public class RetalDriverApplication extends Application {
         //释放两个apk，一个是xposed模块，一个是原生的apk，原生apk替换为当前的Application作为真正的宿主，xposed模块apk在Application被替换之前作为补丁代码注入到当前进程
         releaseApkFiles();
 
+        //替换classloader
         Class<?> contextImplClazz = XposedHelpers.findClassIfExists("android.app.ContextImpl", base.getClassLoader());
         Object contextImpl = XposedHelpers.callStaticMethod(contextImplClazz, "getImpl", base);
         Object loadApk = XposedHelpers.getObjectField(contextImpl, "mPackageInfo");
@@ -55,9 +58,22 @@ public class RetalDriverApplication extends Application {
         } catch (Exception e) {
             //ignore
         }
-        PathClassLoader originClassLoader = new PathClassLoader(new File(ratelWorkDir(this), originAPKFileName).getAbsolutePath(), parentClassLoader);
+        String originApkSourceDir = new File(ratelWorkDir(this), originAPKFileName).getAbsolutePath();
+        PathClassLoader originClassLoader = new PathClassLoader(originApkSourceDir, parentClassLoader);
         XposedHelpers.setObjectField(loadApk, "mClassLoader", originClassLoader);
 
+        //context中的resource，仍然绑定在老的apk环境下，现在把他们迁移
+        ApplicationInfo appinfoInLoadedApk = (ApplicationInfo) XposedHelpers.getObjectField(loadApk, "mApplicationInfo");
+        appinfoInLoadedApk.sourceDir = originApkSourceDir;
+        XposedHelpers.setObjectField(loadApk, "mAppDir", originApkSourceDir);
+        XposedHelpers.setObjectField(loadApk, "mResDir", originApkSourceDir);
+        XposedHelpers.setObjectField(loadApk, "mResources", null);
+        Resources resources = (Resources) XposedHelpers.callMethod(loadApk, "getResources", currentActivityThread());
+        if (resources != null) {
+            XposedHelpers.setObjectField(contextImpl, "mResources", resources);
+        }
+        //替换之后，再也无法访问容器apk里面的资源了，容器中的所有资源全部被替换为原始apk的资源
+        loadResources(originApkSourceDir);
     }
 
     private void releaseApkFiles() {
@@ -162,5 +178,47 @@ public class RetalDriverApplication extends Application {
             }
         }
 
+    }
+
+    public static Object currentActivityThread() {
+        return XposedHelpers.getStaticObjectField(XposedHelpers.findClass("android.app.ActivityThread", RetalDriverApplication.class.getClassLoader()), "sCurrentActivityThread");
+    }
+
+    //以下是加载资源
+    protected AssetManager mAssetManager;//资源管理器
+    protected Resources mResources;//资源
+    protected Resources.Theme mTheme;//主题
+
+    protected void loadResources(String dexPath) {
+        try {
+            AssetManager assetManager = AssetManager.class.newInstance();
+            Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
+            addAssetPath.invoke(assetManager, dexPath);
+            mAssetManager = assetManager;
+        } catch (Exception e) {
+            Log.i("inject", "loadResource error:" + Log.getStackTraceString(e));
+            e.printStackTrace();
+        }
+        Resources superRes = super.getResources();
+        superRes.getDisplayMetrics();
+        superRes.getConfiguration();
+        mResources = new Resources(mAssetManager, superRes.getDisplayMetrics(), superRes.getConfiguration());
+        mTheme = mResources.newTheme();
+        mTheme.setTo(super.getTheme());
+    }
+
+    @Override
+    public AssetManager getAssets() {
+        return mAssetManager == null ? super.getAssets() : mAssetManager;
+    }
+
+    @Override
+    public Resources getResources() {
+        return mResources == null ? super.getResources() : mResources;
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        return mTheme == null ? super.getTheme() : mTheme;
     }
 }
