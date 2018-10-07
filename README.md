@@ -22,9 +22,13 @@ xposed需要比较麻烦的安装环境，ratel的目标只是实现进程内的
 
 ### 子项目
 apktool: 从apktool项目迁移过来，用来实现apk的重新打包
+
 crackmodule：一个xposed模块demo，实现对demoapp的挟持
+
 demoapp：一个app的demo，其中方法com.virjar.ratel.demoapp.MainActivity.text将会被crackmodule挟持
+
 ratel-driver：驱动项目，作为打包产生的apk的入口，负责组装和加载其他模块
+
 ratel-tool：一个java项目，作为ratel打包的工具入口，可以build为一个独立jar包，提供打包服务
 
 ### 工具构建教程
