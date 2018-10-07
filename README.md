@@ -10,7 +10,7 @@ ratel在运行的时候，首先导入xposed环境，完成xposed模块加载，
 ### 依赖
 xposed需要比较麻烦的安装环境，ratel的目标只是实现进程内的hook，所以ratel使用exposed替代xposed框架。底层使用阿里的dexposed（4.x一下）或者epic(5.x以上)，非常感谢epic作者
 
-###限制
+### 限制
 1. 由于进程内hook，无root权限，无法影响系统功能，也就是说修改系统app，或者Android framework的xposed模块无法生效
 2. 不支持资源hook，受限于exposed
 3. xposed模块加载入口，xposed加载一个模块的起始点是handleBindApplication，这个时机在apk运行的前期，但是由于ratel能够接触到最早的代码运行时机是application.attachBaseContext,所以如果你的xposed模块挂载时机在handleBindApplication到application.attachBaseContext，那么模块可能不会生效，因为retal call xposedModule的时候，事情已经发生了
@@ -27,7 +27,7 @@ demoapp：一个app的demo，其中方法com.virjar.ratel.demoapp.MainActivity.t
 ratel-driver：驱动项目，作为打包产生的apk的入口，负责组装和加载其他模块
 ratel-tool：一个java项目，作为ratel打包的工具入口，可以build为一个独立jar包，提供打包服务
 
-###工具构建教程
+### 工具构建教程
 1. ./gradlew ratel-driver:assembleDebug 构建driver项目
 2. 将driver产生的apk，放置到ratel-tool的resource目录下面，并重命名为：ratel-driver.apk (cp ratel-driver/build/outpus/apk/debug/ratel-driver-debug.apk ratel-tool/src/main/resource/ratel-driver.apk)
 3. 构建driver的独立jar包 ./gradlew ratel-tool:assemble 的到输出的工具类jar文件：ratel-tool/build/libs/ratel-tool-1.0.0.jar
