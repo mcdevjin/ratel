@@ -10,6 +10,11 @@ ratel在运行的时候，首先导入xposed环境，完成xposed模块加载，
 ### 依赖
 xposed需要比较麻烦的安装环境，ratel的目标只是实现进程内的hook，所以ratel使用exposed替代xposed框架。底层使用阿里的dexposed（4.x一下）或者epic(5.x以上)，非常感谢epic作者
 
+## 仓库地址
+github： https://github.com/virjar/ratel
+
+码云： https://gitee.com/virjar/ratel
+
 ### 限制
 1. 由于进程内hook，无root权限，无法影响系统功能，也就是说修改系统app，或者Android framework的xposed模块无法生效
 2. 不支持资源hook，受限于exposed
